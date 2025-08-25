@@ -1,0 +1,27 @@
+﻿@page "/listcustomer"
+@using BL_QuickGrid_Wasm_Net8.Shared.Entities
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using System.Net.Http
+@inject HttpClient Http
+@rendermode @(new InteractiveWebAssemblyRenderMode(prerender: false))
+
+<h3>List Customers</h3>
+<QuickGrid Items="customers.AsQueryable()">
+    <PropertyColumn Property="c => c.Id" Title="Id"></PropertyColumn>
+    <PropertyColumn Property="c => c.FirstName" Title="First Name"></PropertyColumn>
+    <PropertyColumn Property="c => c.LastName" Title="Last Name"></PropertyColumn>
+    <PropertyColumn Property="c => c.Location" Title="Location"></PropertyColumn>
+</QuickGrid>
+
+@code {
+    List<Customer> customers = new();
+
+    override protected async Task OnInitializedAsync()
+    {
+        var result = await Http.GetFromJsonAsync<List<Customer>>("api/customer");
+        if (result is not null)
+        {
+            customers = result;
+        }
+    }
+}
