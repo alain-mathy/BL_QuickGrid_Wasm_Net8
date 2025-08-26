@@ -6,11 +6,15 @@
 @rendermode @(new InteractiveWebAssemblyRenderMode(prerender: false))
 
 <h3>List Customers</h3>
-<QuickGrid Items="customers.AsQueryable()" Pagination="pagination">
+<QuickGrid Items="FilteredCustomer" Pagination="pagination">
     <PropertyColumn Property="c => c.Id" Title="Id" Sortable="true"></PropertyColumn>
     <PropertyColumn Property="c => c.FirstName" Title="First Name" Sortable="true"></PropertyColumn>
     <PropertyColumn Property="c => c.LastName" Title="Last Name" Sortable="true"></PropertyColumn>
-    <PropertyColumn Property="c => c.Location" Title="Location" Sortable="true"></PropertyColumn>
+    <PropertyColumn Property="c => c.Location" Title="Location" Sortable="true">
+        <ColumnOptions>
+                <input type="search" @bind="filteredText" @bind:event="oninput" placeholder="Filter by location" />
+        </ColumnOptions>
+    </PropertyColumn>
 </QuickGrid>
 
 <Paginator State="pagination"></Paginator>
@@ -18,6 +22,25 @@
 @code {
     PaginationState pagination = new() { ItemsPerPage = 5 };
     List<Customer> customers = new();
+    string? filteredText;
+
+    IQueryable<Customer> FilteredCustomer
+    {
+        get
+        {
+            var result = customers.AsQueryable();
+            if (!string.IsNullOrWhiteSpace(filteredText))
+            {
+
+                result = customers.Where(c => c.FirstName.Contains(filteredText, StringComparison.OrdinalIgnoreCase)
+                                         || c.LastName.Contains(filteredText, StringComparison.OrdinalIgnoreCase)
+                                         || c.Location.Contains(filteredText, StringComparison.OrdinalIgnoreCase))
+                                .AsQueryable();
+            }
+
+            return result;
+        }
+    }
 
     override protected async Task OnInitializedAsync()
     {
