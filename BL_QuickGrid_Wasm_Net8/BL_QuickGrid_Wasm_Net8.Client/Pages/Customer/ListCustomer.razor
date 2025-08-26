@@ -6,14 +6,17 @@
 @rendermode @(new InteractiveWebAssemblyRenderMode(prerender: false))
 
 <h3>List Customers</h3>
-<QuickGrid Items="customers.AsQueryable()">
+<QuickGrid Items="customers.AsQueryable()" Pagination="pagination">
     <PropertyColumn Property="c => c.Id" Title="Id" Sortable="true"></PropertyColumn>
     <PropertyColumn Property="c => c.FirstName" Title="First Name" Sortable="true"></PropertyColumn>
     <PropertyColumn Property="c => c.LastName" Title="Last Name" Sortable="true"></PropertyColumn>
     <PropertyColumn Property="c => c.Location" Title="Location" Sortable="true"></PropertyColumn>
 </QuickGrid>
 
+<Paginator State="pagination"></Paginator>
+
 @code {
+    PaginationState pagination = new() { ItemsPerPage = 5 };
     List<Customer> customers = new();
 
     override protected async Task OnInitializedAsync()
