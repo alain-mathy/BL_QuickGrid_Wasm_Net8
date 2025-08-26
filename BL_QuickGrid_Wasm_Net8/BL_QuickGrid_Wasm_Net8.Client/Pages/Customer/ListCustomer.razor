@@ -7,10 +7,10 @@
 
 <h3>List Customers</h3>
 <QuickGrid Items="customers.AsQueryable()">
-    <PropertyColumn Property="c => c.Id" Title="Id"></PropertyColumn>
-    <PropertyColumn Property="c => c.FirstName" Title="First Name"></PropertyColumn>
-    <PropertyColumn Property="c => c.LastName" Title="Last Name"></PropertyColumn>
-    <PropertyColumn Property="c => c.Location" Title="Location"></PropertyColumn>
+    <PropertyColumn Property="c => c.Id" Title="Id" Sortable="true"></PropertyColumn>
+    <PropertyColumn Property="c => c.FirstName" Title="First Name" Sortable="true"></PropertyColumn>
+    <PropertyColumn Property="c => c.LastName" Title="Last Name" Sortable="true"></PropertyColumn>
+    <PropertyColumn Property="c => c.Location" Title="Location" Sortable="true"></PropertyColumn>
 </QuickGrid>
 
 @code {
